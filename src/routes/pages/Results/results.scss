@@ -1,0 +1,43 @@
+.results {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+
+  &-player {
+    width: 100%;
+  }
+
+  &-card {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+
+    h1 {
+      margin-bottom: 12px;
+    }
+
+    .results-player {
+      opacity: 1;
+      transition: opacity .2s ease-out;
+    }
+
+    &.winner {
+      h1 {
+        color: #3BA55D;
+      }
+    }
+
+    &.loser {
+      h1 {
+        color: #E71C59;
+      }
+
+      .results-player {
+        opacity: .5;
+      }
+    }
+  }
+}

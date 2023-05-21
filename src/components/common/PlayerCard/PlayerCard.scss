@@ -1,0 +1,19 @@
+.playerCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+
+  &-img {
+    width: 200px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin: 0 auto;
+  }
+
+  &-name {
+    text-align: center;
+    font-weight: bold;
+  }
+}

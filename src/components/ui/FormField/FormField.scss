@@ -1,0 +1,35 @@
+.FormField {
+  background-color: #34394B;
+  border-color: #34394B;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 8px;
+  outline: none;
+
+  &-label {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  &:hover {
+    background-color: #44495C;
+    border-color: #34394B;
+  }
+
+  &:focus {
+    background-color: #44495C;
+    border-color: #44495C;
+  }
+
+  &-notchedOutline {
+    display: none;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
+  }
+}
