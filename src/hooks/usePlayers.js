@@ -17,7 +17,7 @@ const usePlayers = (playerNames = []) => {
       console.log('debug exception: ', exception);
       setLoading(false);
     }
-  }, [playerNames]);
+  }, []);
 
   const calculateScope = (playerArg, reposArg) => {
     if(!playerArg && !reposArg) {
