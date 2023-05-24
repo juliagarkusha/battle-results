@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/battle-results/static/css/main.ddaabf27.css",
-    "main.js": "/battle-results/static/js/main.60cecfcc.js",
+    "main.js": "/battle-results/static/js/main.196fe04e.js",
     "index.html": "/battle-results/index.html",
     "main.ddaabf27.css.map": "/battle-results/static/css/main.ddaabf27.css.map",
-    "main.60cecfcc.js.map": "/battle-results/static/js/main.60cecfcc.js.map"
+    "main.196fe04e.js.map": "/battle-results/static/js/main.196fe04e.js.map"
   },
   "entrypoints": [
     "static/css/main.ddaabf27.css",
-    "static/js/main.60cecfcc.js"
+    "static/js/main.196fe04e.js"
   ]
 }
