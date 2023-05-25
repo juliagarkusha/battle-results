@@ -1,0 +1,15 @@
+.TabItem {
+  flex-shrink: 0;
+  padding: .5rem 1rem;
+  font-weight: bold;
+  color: white;
+  transition: color .2s ease-out;
+
+  &.active {
+    color: #0E78F8;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

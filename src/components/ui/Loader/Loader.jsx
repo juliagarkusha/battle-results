@@ -9,11 +9,13 @@ import "./Loader.scss";
 const Loader = (props) => {
   const {
     text,
+    size = 20,
+    className,
   } = props
 
   return (
-    <div className="Loader">
-      <CircularProgress color="inherit" size={20} />
+    <div className={className ? `Loader ${className}` : 'Loader'}>
+      <CircularProgress color="inherit" size={size} />
       <Typography variant="h4" sx={{ pt: 3 }}>{text}</Typography>
     </div>
   )
