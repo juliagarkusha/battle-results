@@ -1,8 +1,18 @@
 class GithubApi {
   static URL = "https://api.github.com";
 
+  static async getPopularRepos (language) {
+    return fetch(`${GithubApi.URL}/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`)
+      .then(response => {
+        if(response.ok) {
+          return response.json();
+        }
+
+        throw new Error(`Can not fetch user repos from server`);
+      })
+  }
+
   static getUser (userName) {
-    // return fetch(`${GithubApi.URL}/users/${userName}`)
     return fetch(`${GithubApi.URL}/users/${userName}`)
       .then(response => {
         if(response.ok) {
