@@ -1,23 +1,12 @@
-import {useEffect, useState} from "react";
-import githubApi from "../api/GithubApi";
-const usePlayers = (playerNames = []) => {
-  const [loading, setLoading] = useState(false);
-  const [players, setPlayers] = useState([]);
-  const [repos, setRepos] = useState([]);
-  const [winnerIndex, setWinnerIndex] = useState(null);
+import { useEffect, useState } from "react";
+import { getPlayers, getRepos } from "../store/thunk/players";
+import { useDispatch, useSelector } from "react-redux";
 
-  useEffect(() => {
-    try {
-      setLoading(true);
-      githubApi.getUsers(playerNames).then(data => {
-        setPlayers(data.users);
-        setLoading(false);
-      });
-    } catch (exception) {
-      console.log('debug exception: ', exception);
-      setLoading(false);
-    }
-  }, []);
+const usePlayers = (playerNames = []) => {
+  const dispatch = useDispatch();
+  const players = useSelector(state => state.players.players);
+  const repos = useSelector(state => state.players.repos);
+  const [winnerIndex, setWinnerIndex] = useState(null);
 
   const calculateScope = (playerArg, reposArg) => {
     if(!playerArg && !reposArg) {
@@ -36,6 +25,7 @@ const usePlayers = (playerNames = []) => {
     if (!players.length || !repos.length) {
       return;
     }
+
     const player1Scope = calculateScope(players[0], repos[0]);
     const player2Scope = calculateScope(players[1], repos[1]);
 
@@ -46,20 +36,19 @@ const usePlayers = (playerNames = []) => {
 
     setWinnerIndex(player1Scope > player2Scope ? 0 : 1);
   };
+
+  useEffect(() => {
+    dispatch(getPlayers(playerNames))
+  }, []);
+
   useEffect(() => {
     if(!players.length) {
       return;
     }
 
-    try {
-      githubApi.getPlayersRepos(players.map(player => player.login))
-        .then((data) => {
-        setRepos(data.repos);
-      });
-    } catch (exception) {
-      console.log('debug exception: ', exception);
-    }
+    dispatch(getRepos(players))
   }, [players.length]);
+
   useEffect(() => {
     if (!players.length || !repos.length) {
       return;
@@ -69,8 +58,6 @@ const usePlayers = (playerNames = []) => {
   }, [players.length, repos.length])
 
   return {
-    loading,
-    players,
     winnerIndex
   }
 }

@@ -25,7 +25,7 @@ const PlayerOneSearchForm = (props) => {
     const validData = validateForm();
 
     if(validData) {
-      onSubmit(validData, 'player1');
+      onSubmit(validData);
     }
   }
 

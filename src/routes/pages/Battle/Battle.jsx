@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "@mui/material/Button";
-import GithubApi from "../../../api/GithubApi";
 import PlayerOneSearchForm from "../../../components/common/PlayerOneSearchForm";
 import PlayerTwoSearchForm from "../../../components/common/PlayerTwoSearchForm";
 import PlayerCard from "../../../components/common/PlayerCard";
+import { getPlayer1, getPlayer2 } from "../../../store/thunk/players";
+import { resetPlayer1, resetPlayer2 } from "../../../store/actions/players";
 import "./battle.scss";
 
 const PLAYER_ONE_NICK = 'player1Nick';
@@ -12,42 +14,35 @@ const PLAYER_TWO_NICK = 'player2Nick';
 
 const Battle = () => {
   const navigate = useNavigate();
-
-  const [ player1, setPlayer1 ] = useState();
-  const [ player2, setPlayer2 ] = useState();
   const [ search, setSearch ] = useSearchParams();
-  const [ isLoadingPlayer1, setIsLoadingPlayer1 ] = useState(false);
-  const [ isLoadingPlayer2, setIsLoadingPlayer2 ] = useState(false);
-  const [ isErrorPlayer1, setIsErrorPlayer1 ] = useState(false);
-  const [ isErrorPlayer2, setIsErrorPlayer2 ] = useState(false);
+  const dispatch = useDispatch();
 
-  const onSubmitPlayerHandler = async (formData, player) => {
-    const isOnePlayer = player === 'player1';
-    isOnePlayer ? setIsLoadingPlayer1(true) : setIsLoadingPlayer2(true);
-    isOnePlayer ? setIsErrorPlayer1(false) : setIsErrorPlayer2(false);
+  const player1 = useSelector((state) => state.players.player1);
+  const player2 = useSelector((state) => state.players.player2);
+  const isLoadingPlayer1 = useSelector((state) => state.players.loadingPlayer1);
+  const isLoadingPlayer2 = useSelector((state) => state.players.loadingPlayer2);
+  const isErrorPlayer1 = useSelector((state) => state.players.errorPlayer1);
+  const isErrorPlayer2 = useSelector((state) => state.players.errorPlayer2);
 
-    try {
-      const player = await GithubApi.getUser(formData.playerName);
+  const onSubmitPlayer1Handler = (formData) => {
+    dispatch(getPlayer1(formData.playerName));
 
-      if(isOnePlayer) {
-        search.set(PLAYER_ONE_NICK, formData.playerName);
-      } else {
-        search.set(PLAYER_TWO_NICK, formData.playerName);
-      }
-      setSearch(search);
-      isOnePlayer ? setPlayer1(player) : setPlayer2(player);
-    } catch (exception) {
-      isOnePlayer ? setIsErrorPlayer1(true) : setIsErrorPlayer2(true);
-    } finally {
-      isOnePlayer ? setIsLoadingPlayer1(false) : setIsLoadingPlayer2(false);
-    }
+    search.set(PLAYER_ONE_NICK, formData.playerName);
+    setSearch(search);
+  }
+
+  const onSubmitPlayer2Handler = (formData) => {
+    dispatch(getPlayer2(formData.playerName));
+
+    search.set(PLAYER_TWO_NICK, formData.playerName);
+    setSearch(search);
   }
 
   const onResetPlayerHandler = (player) => {
     const isOnePlayer = player === 'player1';
-    isOnePlayer ? setPlayer1(undefined) : setPlayer2(undefined);
-    isOnePlayer ? search.delete(PLAYER_ONE_NICK) : search.delete(PLAYER_TWO_NICK);
-    setSearch(search);
+    isOnePlayer
+      ?  dispatch(resetPlayer1())
+      :  dispatch(resetPlayer2());
   }
 
   const onBattleButtonClickHandler = () => {
@@ -59,11 +54,11 @@ const Battle = () => {
 
   useEffect(() => {
     if (search.has(PLAYER_ONE_NICK)) {
-      onSubmitPlayerHandler({playerName: search.get(PLAYER_ONE_NICK)}, 'player1')
+      onSubmitPlayer1Handler({playerName: search.get(PLAYER_ONE_NICK)})
     }
 
     if (search.has(PLAYER_TWO_NICK)) {
-      onSubmitPlayerHandler({playerName: search.get(PLAYER_TWO_NICK)}, 'player2')
+      onSubmitPlayer2Handler({playerName: search.get(PLAYER_TWO_NICK)})
     }
   }, []);
 
@@ -81,7 +76,7 @@ const Battle = () => {
                 />
               )
               : <PlayerOneSearchForm
-                onSubmit={onSubmitPlayerHandler}
+                onSubmit={onSubmitPlayer1Handler}
                 isLoading={isLoadingPlayer1}
                 isError={isErrorPlayer1}
               />
@@ -98,7 +93,7 @@ const Battle = () => {
                 />
               )
               : <PlayerTwoSearchForm
-                onSubmit={onSubmitPlayerHandler}
+                onSubmit={onSubmitPlayer2Handler}
                 isLoading={isLoadingPlayer2}
                 isError={isErrorPlayer2}
               />
