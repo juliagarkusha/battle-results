@@ -29,11 +29,6 @@ export const playersSlice = createSlice({
       state.errorPlayer2 = null;
       state.player2 = action.payload;
     },
-    // setPlayers: (state, action) => {
-    //   state.loadingPlayers = false;
-    //   state.errorPlayers = null;
-    //   state.players = action.payload;
-    // },
     setRepos: (state, action) => {
       state.loadingRepos = false;
       state.errorRepos = null;
