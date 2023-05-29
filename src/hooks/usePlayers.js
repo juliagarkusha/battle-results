@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPlayers, getRepos } from "../store/thunk/players";
+import { getPlayers, getRepos } from "../store/players/players.requests";
 import { useDispatch, useSelector } from "react-redux";
 
 const usePlayers = (playerNames = []) => {

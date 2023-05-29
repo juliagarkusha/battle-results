@@ -5,8 +5,8 @@ import Button from "@mui/material/Button";
 import PlayerOneSearchForm from "../../../components/common/PlayerOneSearchForm";
 import PlayerTwoSearchForm from "../../../components/common/PlayerTwoSearchForm";
 import PlayerCard from "../../../components/common/PlayerCard";
-import { getPlayer1, getPlayer2 } from "../../../store/thunk/players";
-import { resetPlayer1, resetPlayer2 } from "../../../store/actions/players";
+import { getPlayer1, getPlayer2 } from "../../../store/players/players.requests";
+import { resetPlayer1, resetPlayer2 } from "../../../store/players/players.reducer";
 import "./battle.scss";
 
 const PLAYER_ONE_NICK = 'player1Nick';

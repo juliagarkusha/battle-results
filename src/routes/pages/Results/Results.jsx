@@ -13,7 +13,10 @@ const Results = () => {
   const { winnerIndex } = usePlayers([params.get('player1Nick'), params.get('player2Nick')]);
 
   const loadingPlayers = useSelector(state => state.players.loadingPlayers);
-  const players = useSelector(state => state.players.players);
+  const players = useSelector(state => {
+    console.log('debug state: ', state);
+    return state.players.players
+  });
 
   if(loadingPlayers) {
     return <div>loading</div>
