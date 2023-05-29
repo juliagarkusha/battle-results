@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { FC, ReactElement, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "@mui/material/Button";
@@ -12,53 +12,51 @@ import "./battle.scss";
 const PLAYER_ONE_NICK = 'player1Nick';
 const PLAYER_TWO_NICK = 'player2Nick';
 
-const Battle = () => {
+const Battle: FC = (): ReactElement => {
   const navigate = useNavigate();
-  const [ search, setSearch ] = useSearchParams();
+  const [search, setSearch] = useSearchParams();
   const dispatch = useDispatch();
 
-  const player1 = useSelector((state) => state.players.player1);
-  const player2 = useSelector((state) => state.players.player2);
-  const isLoadingPlayer1 = useSelector((state) => state.players.loadingPlayer1);
-  const isLoadingPlayer2 = useSelector((state) => state.players.loadingPlayer2);
-  const isErrorPlayer1 = useSelector((state) => state.players.errorPlayer1);
-  const isErrorPlayer2 = useSelector((state) => state.players.errorPlayer2);
+  const player1 = useSelector((state: RootState) => state.players.player1);
+  const player2 = useSelector((state: RootState) => state.players.player2);
+  const isLoadingPlayer1 = useSelector((state: RootState) => state.players.loadingPlayer1);
+  const isLoadingPlayer2 = useSelector((state: RootState) => state.players.loadingPlayer2);
+  const isErrorPlayer1 = useSelector((state: RootState) => state.players.errorPlayer1);
+  const isErrorPlayer2 = useSelector((state: RootState) => state.players.errorPlayer2);
 
-  const onSubmitPlayer1Handler = (formData) => {
+  const onSubmitPlayer1Handler = (formData: { playerName: string }) => {
     dispatch(getPlayer1(formData.playerName));
 
     search.set(PLAYER_ONE_NICK, formData.playerName);
     setSearch(search);
-  }
+  };
 
-  const onSubmitPlayer2Handler = (formData) => {
+  const onSubmitPlayer2Handler = (formData: { playerName: string }) => {
     dispatch(getPlayer2(formData.playerName));
 
     search.set(PLAYER_TWO_NICK, formData.playerName);
     setSearch(search);
-  }
+  };
 
-  const onResetPlayerHandler = (player) => {
+  const onResetPlayerHandler = (player: 'player1' | 'player2') => {
     const isOnePlayer = player === 'player1';
-    isOnePlayer
-      ?  dispatch(resetPlayer1())
-      :  dispatch(resetPlayer2());
-  }
+    isOnePlayer ? dispatch(resetPlayer1()) : dispatch(resetPlayer2());
+  };
 
   const onBattleButtonClickHandler = () => {
     navigate({
       pathname: 'results',
-      search: `?${PLAYER_ONE_NICK}=${player1.login}&${PLAYER_TWO_NICK}=${player2.login}`
+      search: `?${PLAYER_ONE_NICK}=${player1.login}&${PLAYER_TWO_NICK}=${player2.login}`,
     });
-  }
+  };
 
   useEffect(() => {
     if (search.has(PLAYER_ONE_NICK)) {
-      onSubmitPlayer1Handler({playerName: search.get(PLAYER_ONE_NICK)})
+      onSubmitPlayer1Handler({ playerName: search.get(PLAYER_ONE_NICK) || '' });
     }
 
     if (search.has(PLAYER_TWO_NICK)) {
-      onSubmitPlayer2Handler({playerName: search.get(PLAYER_TWO_NICK)})
+      onSubmitPlayer2Handler({ playerName: search.get(PLAYER_TWO_NICK) || '' });
     }
   }, []);
 

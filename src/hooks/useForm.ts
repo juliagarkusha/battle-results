@@ -1,12 +1,36 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 
 const emailRegExt = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 const stringOnlyRegExp = new RegExp(/[0-9]/);
 const passwordRegExp = new RegExp(/([a-z A-Z]{1,})([0-9]{1,})/);
 
-const validateFunctions = {
+interface ValidateFunction {
+  validate: (value: string) => boolean;
+  errorMessage: string;
+}
+
+interface FieldProps {
+  defaultValue?: string;
+  type: string;
+  label: string;
+  placeholder: string;
+  validateRules: string[];
+}
+
+interface BindProps {
+  id: string;
+  name: string;
+  type: string;
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  error: string;
+}
+
+const validateFunctions: Record<string, ValidateFunction | ((count: number) => ValidateFunction)> = {
   required: {
-    validate: value => !!value?.length,
+    validate: (value) => !!value?.length,
     errorMessage: 'Required field!',
   },
   min: (count) => ({
@@ -18,20 +42,20 @@ const validateFunctions = {
     errorMessage: `Maximum length ${count}!`,
   }),
   stringOnly: {
-    validate:  value => !stringOnlyRegExp.test(value),
+    validate: (value) => !stringOnlyRegExp.test(value),
     errorMessage: 'Allow letter only!',
   },
   email: {
-    validate: value => emailRegExt.test(value),
+    validate: (value) => emailRegExt.test(value),
     errorMessage: 'Wrong email!',
   },
   password: {
-    validate: value => passwordRegExp.test(value),
+    validate: (value) => passwordRegExp.test(value),
     errorMessage: 'Wrong password format!',
   },
 };
 
-const useForm = (props) => {
+const useForm = (props: Record<string, FieldProps>) => {
   const [ isFormError, setIsFormError ] = useState(false);
 
   const fields = Object.keys(props).map((fieldKey) => {

@@ -1,24 +1,19 @@
-//External deps
 import React, { useEffect } from "react";
-import {
-  createTheme,
-  StyledEngineProvider,
-  Experimental_CssVarsProvider as CssVarsProvider,
-  experimental_extendTheme as extendTheme,
-} from '@mui/material/styles';
-
-//Internal deps
-import Router from "../../../routes/Router";
+import { createTheme, StyledEngineProvider } from '@mui/material/styles';
+import { Theme } from '@mui/system';
 import { blue, deepOrange } from '@mui/material/colors';
 
-//Local deps
+import Router from "../../../routes/Router";
+
 import './App.scss';
+import {ThemeProvider} from "@mui/material";
 
 function App() {
-  useEffect(() => {
+  useEffect((): void => {
     document.title = 'battle-app';
   }, []);
-  const theme = createTheme({
+
+  const theme: Theme = createTheme({
     palette: {
       mode: 'dark',
       primary: {
@@ -35,23 +30,23 @@ function App() {
         main: '#242838',
       },
       error: {
-        main: '#E71C59'
+        main: '#E71C59',
       },
       warning: {
         main: deepOrange[900],
       },
       text: {
-        main: '#ffffff',
-      }
+        primary: '#ffffff',
+      },
     },
   });
 
   return (
-    <StyledEngineProvider injectFirst>
-      <CssVarsProvider theme={extendTheme(theme)}>
-        <Router />
-      </CssVarsProvider>
-    </StyledEngineProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <Router />
+        </ThemeProvider>
+      </StyledEngineProvider>
   );
 }
 

@@ -1,8 +1,9 @@
-export const playerSearchFields = {
+import {PlayerSearchField} from "../PlayerOneSearchForm/fields";
+
+export const playerSearchFields: Record<string, PlayerSearchField> = {
   playerName: {
     label: 'Player 2',
     type: 'text',
-    // validateRules: [ 'required', 'min_2' ],
     validateRules: [ 'required' ],
     placeholder: 'Github username',
     defaultValue: '',

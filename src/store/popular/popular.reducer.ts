@@ -1,19 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {getPopularRepos} from "./popular.requests";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getPopularRepos } from "./popular.requests";
+
+interface PopularState {
+  selectedLanguage: string;
+  loading: boolean;
+  repos: any[];
+  error: any | null;
+}
+
+const initialState: PopularState = {
+  selectedLanguage: 'All',
+  loading: false,
+  repos: [],
+  error: null
+};
 
 export const popularSlice = createSlice({
   name: "popular",
-  initialState: {
-    selectedLanguage: 'All',
-    loading: false,
-    repos: [],
-    error: null
-  },
+  initialState,
   reducers: {
-    setSelectedLanguage: (state, action) => {
-      state.selectedLanguage = action.payload
+    setSelectedLanguage: (state, action: PayloadAction<string>) => {
+      state.selectedLanguage = action.payload;
     },
-    setRepos: (state, action) => {
+    setRepos: (state, action: PayloadAction<any[]>) => {
       state.loading = false;
       state.repos = action.payload;
     },
@@ -21,26 +30,26 @@ export const popularSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    isError: (state, action) => {
+    isError: (state, action: PayloadAction<any>) => {
       state.loading = false;
       state.error = action.payload;
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder.addCase(getPopularRepos.pending, (state) => {
       state.loading = true;
       state.error = null;
-    })
+    });
     builder.addCase(getPopularRepos.fulfilled, (state, action) => {
       state.loading = false;
       state.repos = action.payload;
-    })
+    });
     builder.addCase(getPopularRepos.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    })
-  }
-})
+    });
+  },
+});
 
 export const {
   setSelectedLanguage,
