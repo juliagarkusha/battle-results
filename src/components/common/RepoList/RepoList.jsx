@@ -10,7 +10,7 @@ const RepoList = (props) => {
     loading,
     popularRepos
   } = props;
-  
+
   if(loading) {
     return (
       <Loader
@@ -32,12 +32,12 @@ const RepoList = (props) => {
       {popularRepos.map((repo, index) => (
         <RepoCard
           key={repo.id}
-          index={index}
-          ownerAvatar={repo.owner.avatar_url}
-          ownerLogin={repo.owner.login}
-          repoName={repo.name}
-          repoUrl={repo.html_url}
-          stargazersCount={repo.stargazers_count}
+          index={repo.id}
+          ownerAvatar={repo.owner?.avatar_url}
+          ownerLogin={repo.owner?.login}
+          repoName={repo?.name}
+          repoUrl={repo?.html_url}
+          stargazersCount={repo?.stargazers_count}
         />
       ))}
     </Grid>

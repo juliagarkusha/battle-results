@@ -3,19 +3,19 @@ import { useLocation } from "react-router-dom";
 import PlayerCard from "../../../components/common/PlayerCard";
 import usePlayers from "../../../hooks/usePlayers";
 import PlayerCardInfo from "../../../components/common/PlayerCard/PlayerCardInfo";
+import { useSelector } from "react-redux";
 import "./results.scss";
 
 const Results = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
 
-  const {
-    players,
-    winnerIndex,
-    loading,
-  } = usePlayers([params.get('player1Nick'), params.get('player2Nick')]);
+  const { winnerIndex } = usePlayers([params.get('player1Nick'), params.get('player2Nick')]);
 
-  if(loading) {
+  const loadingPlayers = useSelector(state => state.players.loadingPlayers);
+  const players = useSelector(state => state.players.players);
+
+  if(loadingPlayers) {
     return <div>loading</div>
   }
 
